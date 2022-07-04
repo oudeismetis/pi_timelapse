@@ -2,7 +2,7 @@
 
 USER=oudeis
 HOME=/home/$USER
-APP_HOME=$HOME/pi-timelapse
+APP_HOME=$HOME/pi_timelapse
 SYSTEMD_HOME=/etc/systemd/system
 MAIN_SERVICE=timelapse.service
 USB_SERVICE=timelapse-usb.service
