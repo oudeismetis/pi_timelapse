@@ -10,11 +10,11 @@ USB_SERVICE=timelapse-usb.service
 echo pi-timelapse install starting...
 
 cd $HOME
-echo Updating OS and installing system dependencies...
+# echo Updating OS and installing system dependencies...
 # sudo apt update
 
 # USB
-sudo apt -y install exfat-fuse
+# sudo apt -y install exfat-fuse
 
 echo Downloading pi-timelapse...
 curl -L https://github.com/oudeismetis/pi_timelapse/archive/main.zip > pi_timelapse-main.zip
