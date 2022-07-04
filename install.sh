@@ -26,13 +26,13 @@ echo Installing Python dependencies...
 pip3 install -r requirements.txt
 
 echo installing $MAIN_SERVICE...
-sudo cp $APP_HOME/scripts/$MAIN_SERVICE $SYSTEMD_HOME
+sudo cp $APP_HOME/services/$MAIN_SERVICE $SYSTEMD_HOME
 sudo chmod 644 $SYSTEMD_HOME/$MAIN_SERVICE
 sudo systemctl start $MAIN_SERVICE
 sudo systemctl enable $MAIN_SERVICE
 
 echo installing $USB_SERVICE...
-sudo cp $APP_HOME/scripts/$USB_SERVICE $SYSTEMD_HOME
+sudo cp $APP_HOME/services/$USB_SERVICE $SYSTEMD_HOME
 sudo chmod 644 $SYSTEMD_HOME/$USB_SERVICE
 sudo systemctl start $USB_SERVICE
 sudo systemctl enable $USB_SERVICE
@@ -40,8 +40,8 @@ sudo systemctl enable $USB_SERVICE
 sudo systemctl daemon-reload
 
 # install crontab
-chmod a+x $APP_HOME/scripts/timelapse-delete-files.sh
-crontab -u $USER $APP_HOME/scripts/crontab-timelapse
+# chmod a+x $APP_HOME/services/timelapse-delete-files.sh
+# crontab -u $USER $APP_HOME/services/crontab-timelapse
 
 echo *************************************
 echo pi-timelapse install complete.
