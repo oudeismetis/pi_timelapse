@@ -1,4 +1,4 @@
-# Timelapse video for Grandin house project
+# Timelapse video for Raspberry Pi
 
 https://maker.pro/raspberry-pi/projects/how-to-build-a-time-lapse-camera-using-a-raspberry-pi-zero-w
 

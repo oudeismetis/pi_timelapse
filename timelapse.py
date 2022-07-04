@@ -4,7 +4,7 @@ from io import BytesIO
 from picamera import PiCamera
 from PIL import Image
 
-MEDIA_DIR = '/timelapse_media'
+MEDIA_DIR = '/home/oudeis/timelapse_media'
 
 with PiCamera() as camera:
     stream = BytesIO()
@@ -16,7 +16,7 @@ with PiCamera() as camera:
         nblack = 0
 
         for pixel in pixels:
-            if pixel < black_thresh:
+            if sum(pixel) < black_thresh:
                 nblack += 1
 
         print(f"{nblack} black pixels out of {len(pixels)}")
