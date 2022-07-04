@@ -11,15 +11,15 @@ echo pi-timelapse install starting...
 
 cd $HOME
 echo Updating OS and installing system dependencies...
-sudo apt update
+# sudo apt update
 
 # USB
 sudo apt -y install exfat-fuse
 
 echo Downloading pi-timelapse...
-curl -L https://github.com/oudeismetis/pi_timelapse/archive/main.zip > pi-timelapse-main.zip
-unzip -q pi-timelapse-main.zip && mv pi-timelapse-main pi-timelapse 
-rm pi-timelapse-main.zip
+curl -L https://github.com/oudeismetis/pi_timelapse/archive/main.zip > pi_timelapse-main.zip
+unzip -q pi_timelapse-main.zip && mv pi_timelapse-main pi_timelapse 
+rm pi_timelapse-main.zip
 cd $APP_HOME
 
 echo Installing Python dependencies...
