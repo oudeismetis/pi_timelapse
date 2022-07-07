@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 ExecStart=/usr/bin/python3 -u timelapse.py
-WorkingDirectory=/home/oudeis/pi-timelapse
+WorkingDirectory=/home/oudeis/pi_timelapse
 StandardOutput=inherit
 StandardError=inherit
 Restart=on-failure
