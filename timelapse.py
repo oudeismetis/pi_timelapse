@@ -1,5 +1,7 @@
 from datetime import datetime
 from io import BytesIO
+from os.path import exists, expanduser
+from subprocess import check_call
 from time import sleep
 
 from picamera import PiCamera
@@ -33,7 +35,7 @@ def capture_image(camera):
     camera.capture(stream, format="jpeg")
     stream.seek(0)
     with Image.open(stream) as image:
-        if is_mostly_black(image):
+        if is_mostly_dark(image):
             # Nighttime so don't bother saving it
             print("mostly black")
         else:
@@ -54,7 +56,7 @@ def main():
                 # To capture somewhat consistently, subtract our run time
                 duration = datetime.now() - start
                 sleep(CAPTURE_FREQUENCY - duration.seconds)
-        except Exception e:
+        except Exception as e:
             print(f"failure from main loop, shutting down. {e}")
 
 
