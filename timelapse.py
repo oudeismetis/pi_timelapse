@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from io import BytesIO
 from os.path import exists, expanduser
@@ -7,26 +8,33 @@ from time import sleep
 from picamera import PiCamera
 from PIL import Image
 
+logger = logging.getLogger(__name__)
+
 MEDIA_DIR = "/timelapse_media"
 CAPTURE_FREQUENCY = 300  # numbers of seconds to wait before capturing a new image
 
 
-def setup_folders():
-    if not exists(MEDIA_DIR):
-        check_call(["sudo", "mkdir", expanduser(MEDIA_DIR)])
+def setup_folder(folder_path):
+    if not exists(folder_path):
+        check_call(["sudo", "mkdir", expanduser(folder_path)])
         # add write permissions for all
-        check_call(["sudo", "chmod", "a+w", expanduser(MEDIA_DIR)])
+        check_call(["sudo", "chmod", "a+w", expanduser(folder_path)])
+
 
 def is_mostly_dark(image):
     pixels = image.getdata()
-    black_thresh = 50
+    black_thresh = 75
     nblack = 0
 
+    start = datetime.now()
     for pixel in pixels:
+        # TODO - don't need to check the whole file. Sample 25%?
         if sum(pixel) < black_thresh:
             nblack += 1
+    duration = datetime.now() - start
+    logger.info(f"Nighttime detection took: {duration}s")
 
-    print(f"{nblack} black pixels out of {len(pixels)}")
+    logger.info(f"{nblack} black pixels out of {len(pixels)}")
     return (nblack / float(len(pixels))) > 0.5
 
 
@@ -35,18 +43,15 @@ def capture_image(camera):
     camera.capture(stream, format="jpeg")
     stream.seek(0)
     with Image.open(stream) as image:
-        if is_mostly_dark(image):
-            # Nighttime so don't bother saving it
-            print("mostly black")
-        else:
-            # TODO - If not mostly black, write to file
-            pass
-        file_name = f"{datetime.now().strftime('%Y-%m-%d_%H%M')}.jpeg"
-        image.save(f"{MEDIA_DIR}/{file_name}")
+        if not is_mostly_dark(image):
+            folder = datetime.now().strftime("%Y-%m-%d")
+            setup_folder(folder)
+            file_name = datetime.now().strftime("%Y-%m-%d_%H%M")
+            image.save(f"{MEDIA_DIR}/{folder}/{file_name}.jpeg")
 
 
 def main():
-    setup_folders()
+    setup_folder(MEDIA_DIR)
     with PiCamera() as camera:
         camera.resolution = (1280, 720)
         try:
@@ -57,7 +62,7 @@ def main():
                 duration = datetime.now() - start
                 sleep(CAPTURE_FREQUENCY - duration.seconds)
         except Exception as e:
-            print(f"failure from main loop, shutting down. {e}")
+            logger.error(f"failure from main loop, shutting down. {e}")
 
 
 # TODO - Make for folder for every 24 hours
