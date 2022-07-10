@@ -45,7 +45,7 @@ def capture_image(camera):
     with Image.open(stream) as image:
         if not is_mostly_dark(image):
             folder = datetime.now().strftime("%Y-%m-%d")
-            setup_folder(folder)
+            setup_folder(f"{MEDIA_DIR}/{folder}")
             file_name = datetime.now().strftime("%Y-%m-%d_%H%M")
             image.save(f"{MEDIA_DIR}/{folder}/{file_name}.jpeg")
 

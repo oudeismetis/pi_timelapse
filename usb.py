@@ -68,7 +68,7 @@ def _process_usb(device):
 
 
 def main():
-    logger.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO)
     logger.info('starting timelapse-usb')
 
     context = Context()
