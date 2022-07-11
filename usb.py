@@ -19,6 +19,13 @@ USB_MOUNT_DIR = '/timelapse_usb'
 USB_DIR = USB_MOUNT_DIR + '/timelapse'
 
 
+def setup_folder(folder_path):
+    if not exists(folder_path):
+        check_call(["sudo", "mkdir", expanduser(folder_path)])
+        # add write permissions for all
+        check_call(["sudo", "chmod", "a+w", expanduser(folder_path)])
+
+
 def _copy_files(folder, root=''):
     for filename in listdir(folder):
         full_path = f'{folder}/{filename}'
@@ -32,6 +39,8 @@ def _copy_files(folder, root=''):
         elif isfile(full_path):
             # Destination on the USB shouldn't include folders above our root
             dest = f'{USB_DIR}/{full_path.replace(root, "").strip("/")}'
+            # Makes sure that folder exists first
+            setup_folder('/'.join(dest.split('/')[:-1]))
             logger.info(f'Moving {full_path} to {dest}')
             # TODO test via su to the user running the process
             try:

@@ -29,7 +29,7 @@ def is_mostly_dark(image):
     start = datetime.now()
     for pixel in pixels:
         # TODO - don't need to check the whole file. Sample 25%?
-        if sum(pixel) < black_thresh:
+        if sum(pixel) > black_thresh:
             nblack += 1
     duration = datetime.now() - start
     logger.info(f"Nighttime detection took: {duration}s")
