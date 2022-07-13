@@ -23,7 +23,7 @@ def setup_folder(folder_path):
 
 def is_mostly_dark(image):
     pixels = image.getdata()
-    black_thresh = 75
+    black_thresh = 50
     nblack = 0
 
     # start = datetime.now()
@@ -35,7 +35,7 @@ def is_mostly_dark(image):
     # logger.info(f"Nighttime detection took: {duration}s")
 
     logger.info(f"{nblack} black pixels out of {len(pixels)}")
-    return (nblack / float(len(pixels))) > 0.5
+    return (nblack / float(len(pixels))) > 0.75
 
 
 def capture_image(camera):
