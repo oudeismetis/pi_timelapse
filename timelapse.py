@@ -26,13 +26,13 @@ def is_mostly_dark(image):
     black_thresh = 75
     nblack = 0
 
-    start = datetime.now()
+    # start = datetime.now()
     for pixel in pixels:
-        # TODO - don't need to check the whole file. Sample 25%?
         if sum(pixel) < black_thresh:
             nblack += 1
-    duration = datetime.now() - start
-    logger.info(f"Nighttime detection took: {duration}s")
+    # duration = datetime.now() - start
+    # ~2 seconds. Not worth optimizing
+    # logger.info(f"Nighttime detection took: {duration}s")
 
     logger.info(f"{nblack} black pixels out of {len(pixels)}")
     return (nblack / float(len(pixels))) > 0.5
@@ -51,6 +51,7 @@ def capture_image(camera):
 
 
 def main():
+    logging.basicConfig(level=logging.INFO)
     setup_folder(MEDIA_DIR)
     with PiCamera() as camera:
         camera.resolution = (1280, 720)
