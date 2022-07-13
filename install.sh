@@ -40,8 +40,8 @@ sudo systemctl enable $USB_SERVICE
 sudo systemctl daemon-reload
 
 # install crontab
-# chmod a+x $APP_HOME/services/timelapse-delete-files.sh
-# crontab -u $USER $APP_HOME/services/crontab-timelapse
+chmod a+x $APP_HOME/delete-old-files.sh
+crontab -u $USER $APP_HOME/services/crontab-delete-old-files
 
 echo *************************************
 echo pi-timelapse install complete.
