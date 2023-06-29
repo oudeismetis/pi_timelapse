@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 click = "*"
+pillow = "*"
 
 [dev-packages]
 flake8 = "==4.0.1"

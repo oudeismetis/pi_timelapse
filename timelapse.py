@@ -55,6 +55,7 @@ def main():
     setup_folder(MEDIA_DIR)
     with PiCamera() as camera:
         camera.resolution = (1280, 720)
+        # camera.rotation = 90
         try:
             while True:
                 start = datetime.now()

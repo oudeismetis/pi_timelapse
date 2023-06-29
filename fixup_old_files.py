@@ -59,13 +59,27 @@ def remove_dark_images(folder):
 
 
 @cli.command()
+@click.option('--start', type=str, default='1900-01-01')
+@click.option('--end', type=str, default='9999-01-01')
+@click.argument('camera_name')
+def create_all_videos(camera_name, start, end):
+    for folder in listdir(f"dumps/{camera_name}"):
+        if start <= folder <= end:
+            _create_video(f"dumps/{camera_name}/{folder}")
+
+
+@cli.command()
 @click.argument('folder')
 def create_video(folder):
+    _create_video(folder)
+
+
+def _create_video(folder):
     sub_dir = 'front' if '/front/' in folder else 'rear'
     filename = folder.split("/")[-1]
     if isdir(folder):
         logger.info(f'working on folder {filename}')
-        args1 = "-framerate 24 -pattern_type glob"
+        args1 = "-y -framerate 30 -pattern_type glob"
         args2 = "-s:v 1440x1080 -c:v libx264 -crf 17 -pix_fmt yuv420p"
         video_cmd = f'ffmpeg {args1} -i "{folder}/*.jpeg" {args2} {VIDEO_ROOT}/{sub_dir}/{filename}.mp4'
         system(video_cmd)
@@ -75,9 +89,12 @@ def create_video(folder):
 @click.argument('camera_name')
 def merge_videos(camera_name):
     with open(f"/tmp/{camera_name}_chunks.txt", "w") as f:
-        for video_name in listdir(f"{VIDEO_ROOT}/{camera_name}/"):
-            f.write(f"file '{VIDEO_ROOT}/{camera_name}/{video_name}'\n")
-        video_cmd = f'ffmpeg -f concat -safe 0 -i /tmp/{camera_name}_chunks.txt -c copy {ROOT}/videos/{camera_name}.mp4'
+        video_chunks = listdir(f"{VIDEO_ROOT}/{camera_name}/")
+        video_chunks.sort()
+        for video_name in video_chunks:
+            if video_name.endswith("mp4"):
+                f.write(f"file '{VIDEO_ROOT}/{camera_name}/{video_name}'\n")
+        video_cmd = f'ffmpeg -y -f concat -safe 0 -i /tmp/{camera_name}_chunks.txt -c copy {ROOT}/videos/{camera_name}.mp4'
         # SOOOO annoying. For some reason this ffmpeg command can't run from python
         logger.info(f"Run: {video_cmd}")
 
